@@ -60,7 +60,7 @@ class Register{
         return pinCode;
     }
 
-    int ID(){
+    int getID(){
         return ID;
     }
 
@@ -86,6 +86,30 @@ class Citizen{
         System.out.println("Citizen Name: "+name+", Age: "+age+", Unique ID: "+ID);
     }
 
+    String getName(){
+        return name;
+    }
+
+    int getAge(){
+        return age;
+    }
+
+    int getDaysToBe(){
+        return daysToBe;
+    }
+
+    int getNumOfDoseTaken(){
+        return numOfDoseTaken;
+    }
+
+    String getID(){
+        return ID;
+    }
+
+    String getDoseTaken(){
+        return doseTaken;
+    }
+
 }
 
 class Slot{
@@ -93,7 +117,7 @@ class Slot{
     int numOfSlot = 0;
     int day = 0;
     int quantity = 0;
-    String vaccine;
+    String vaccine = null;
 
     Slot(int HospitalId, int numOfSlot, int day,int quantity, String vaccine){
         this.HospitalId = HospitalId;
@@ -106,6 +130,25 @@ class Slot{
     void printDetails(){
         System.out.println("Slot added by Hospital "+ HospitalId+" for Days: "+day+", Available Quantity: " +quantity+" of Vaccine " + vaccine
         );
+    }
+
+    int getHospitalID(){
+        return HospitalId;
+    }
+
+    int getNumOfSlot(){
+        return numOfSlot;
+    }
+
+    int getDay(){
+        return day;
+    }
+    int getQuantity(){
+        return quantity;
+    }
+
+    String getVaccine(){
+        return vaccine;
     }
 }
 
@@ -235,11 +278,11 @@ class CoWin{
 
     int isVaccinated(String uniqueID){
         Citizen ID = citizenID.get(uniqueID);
-        if(ID.doseTaken==null){
+        if(ID.getDoseTaken()==null){
             return -1;
         }
-        int totalDoseNeedToBeVaccinated = vaccineName.get(ID.doseTaken).getdoseRequired();
-        return totalDoseNeedToBeVaccinated-citizenID.get(uniqueID).numOfDoseTaken;
+        int totalDoseNeedToBeVaccinated = vaccineName.get(ID.getDoseTaken()).getdoseRequired();
+        return totalDoseNeedToBeVaccinated-citizenID.get(uniqueID).getNumOfDoseTaken();
     }
 
   
@@ -248,15 +291,15 @@ class CoWin{
         ArrayList<Slot> arr = new ArrayList<>();
         int a = 0;
         for(Slot s : slotVaccine){
-            if(s.HospitalId==enterHospitalID){
+            if(s.getHospitalID()==enterHospitalID){
                 if(vac == null && s.quantity>0){
-                    System.out.println(a+"-> Day: "+s.day+ " Available Qty: "+s.quantity+" Vaccine: "+s.vaccine);
+                    System.out.println(a+"-> Day: "+s.getDay()+ " Available Qty: "+s.getQuantity()+" Vaccine: "+s.getVaccine());
                     arr.add(s);
                     a++;
                 }
                 else if(vac!=null&&s.quantity>0){
                     if(s.vaccine.equals(vac)){
-                        System.out.println(a+"-> Day: "+s.day+ " Available Qty: "+s.quantity+" Vaccine: "+s.vaccine);
+                        System.out.println(a+"-> Day: "+s.getDay()+ " Available Qty: "+s.getQuantity()+" Vaccine: "+s.getVaccine());
                         arr.add(s);
                         a++;
                     }
@@ -274,21 +317,21 @@ class CoWin{
 
 
             Citizen toBeVaccinated = citizenID.get(uniqueID);
-            toBeVaccinated.doseTaken = toBeOpted.vaccine;
+            toBeVaccinated.doseTaken = toBeOpted.getVaccine();
             if(toBeVaccinated.daysToBe<=toBeOpted.day){
                 Vaccine vacDetails = vaccineName.get(toBeOpted.vaccine);
-                toBeVaccinated.daysToBe = vacDetails.gapBetween + toBeOpted.day;
+                toBeVaccinated.daysToBe = vacDetails.getGap() + toBeOpted.getDay();
 
-                toBeVaccinated.doseTaken = toBeVaccinated.doseTaken;
+                toBeVaccinated.doseTaken = toBeVaccinated.getDoseTaken();
 
-                toBeVaccinated.numOfDoseTaken = toBeVaccinated.numOfDoseTaken +1;
+                toBeVaccinated.numOfDoseTaken = toBeVaccinated.getNumOfDoseTaken() +1;
 
-                toBeOpted.quantity = toBeOpted.quantity - 1;
+                toBeOpted.quantity = toBeOpted.getQuantity() - 1;
 
-                System.out.println(toBeVaccinated.name+" vaccinated with "+toBeVaccinated.doseTaken);
+                System.out.println(toBeVaccinated.getName()+" vaccinated with "+toBeVaccinated.getDoseTaken());
             }
             else{
-                System.out.println(toBeVaccinated.name+" your have to vaccinate on "+ toBeVaccinated.daysToBe);
+                System.out.println(toBeVaccinated.getName()+" your have to vaccinate on "+ toBeVaccinated.getDaysToBe());
             }
             
         }
@@ -309,7 +352,7 @@ class CoWin{
                 Register rr = ep.getValue();
                 if(rr.pinCode==pin){
                     handleError.add(rr);
-                    System.out.println(rr.ID+" "+rr.name);
+                    System.out.println(rr.getID()+" "+rr.getName());
                     // a++; 
                 }
             }
@@ -329,8 +372,8 @@ class CoWin{
             System.out.print("Enter Vaaccine name: ");
             String name = sc.nextLine();
             for(Slot s: slotVaccine){
-                if(s.vaccine.equals(name)){
-                    System.out.println(s.HospitalId+" "+hospitalID.get(s.HospitalId).name);
+                if(s.getVaccine().equals(name)){
+                    System.out.println(s.getHospitalID()+" "+hospitalID.get(s.getHospitalID()).name);
                 }
             }
             System.out.print("Enter hospital id: ");
@@ -345,11 +388,9 @@ class CoWin{
         System.out.print("Enter patient Unique ID: ");
         String patient = sc.nextLine();
 
-        System.out.println(citizenID);
-
         if(citizenID.containsKey(patient)){
             Citizen cc = citizenID.get(patient);
-            String patientID = cc.ID;
+            String patientID = cc.getID();
             int totaldoses =isVaccinated(patientID);
             if(totaldoses==0){
                 System.out.println("You are Fully Vaccinated, No need!!");
@@ -382,9 +423,9 @@ class CoWin{
                         Register rr = ep.getValue();
 
                         for(Slot s: slotVaccine){
-                            if(rr.pinCode==pin && s.vaccine==citizenID.get(patientID).doseTaken){
+                            if(rr.getPinCode()==pin && s.getVaccine()==citizenID.get(patientID).getDoseTaken()){
                                 handleError.add(rr);
-                                System.out.println(rr.ID+" "+rr.name);
+                                System.out.println(rr.getID()+" "+rr.getName());
                                 // a++; 
                             }
                         }
@@ -403,10 +444,10 @@ class CoWin{
                 }
 
                 else if(selectedOption==2){
-                    String vName = citizenID.get(patientID).doseTaken;
+                    String vName = citizenID.get(patientID).getDoseTaken();
                     for(Slot s: slotVaccine){
                         if(s.vaccine.equals(vName)){
-                            System.out.println(s.HospitalId+" "+hospitalID.get(s.HospitalId).name);
+                            System.out.println(s.getHospitalID()+" "+hospitalID.get(s.getHospitalID()).getName());
                         }
                     }
                     System.out.print("Enter hospital id: ");
@@ -430,16 +471,16 @@ class CoWin{
             }
             else{
                 String vac = cit.doseTaken;
-                int takenDoses = isVaccinated(cit.ID);
+                int takenDoses = isVaccinated(cit.getID());
                 if(takenDoses==0){
                     System.out.println("Fully Vaccinated!!!");
                     System.out.println("Vaccine Given: "+vac);
-                    System.out.println("Number of Doses given: "+cit.numOfDoseTaken);
+                    System.out.println("Number of Doses given: "+cit.getNumOfDoseTaken());
                 }
                 else{
                     System.out.println("Partially Vaccinated!!");
                     System.out.println("Vaccine Given: "+vac);
-                    System.out.println("Number of Doses given: "+cit.numOfDoseTaken);
+                    System.out.println("Number of Doses given: "+cit.getNumOfDoseTaken());
                 }
             }
         }
@@ -456,8 +497,8 @@ class CoWin{
         int n = slotVaccine.size();
         while(i<n){
             Slot s = slotVaccine.get(i);
-            if(s.HospitalId == hospital){
-                System.out.println("Day: "+s.day+" Vaccine: "+s.vaccine+" Available Qty: "+s.quantity);
+            if(s.getHospitalID() == hospital){
+                System.out.println("Day: "+s.getDay()+" Vaccine: "+s.getVaccine()+" Available Qty: "+s.getQuantity());
             }
             i++;
         } 
