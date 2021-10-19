@@ -3,6 +3,8 @@ package AdvanceProgramming;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+
+
 import java.util.Map;
 
 
@@ -21,10 +23,10 @@ class Student implements commonFunctions{
     private int ID ;
     static int temp =0;
     private static ArrayList<Student> students = new ArrayList<>();
-    protected Assessment ass = new Assessment();
+    protected static Assessment assessment  = new Assessment();
     public static ArrayList<material> classMaterail = new ArrayList<>();
-    private Comments comments;
-    protected Assessment assessment;
+    private static Comments comment = new Comments();
+    protected static Submission  submission = new Submission();
 
     Student(String name){
         setName(name);
@@ -35,11 +37,11 @@ class Student implements commonFunctions{
     Student(){}
 
     void setComment(Comments comments){
-        this.comments = comments;
+        Student.comment = comments;
     }
 
     Comments getComments(){
-        return comments;
+        return comment;
     }
 
     void addingClassMaterial(material mat){
@@ -203,9 +205,9 @@ class Instructor implements commonFunctions{
 
     private ArrayList<material> classMaterail = new ArrayList<>();
 
-    private Comments comments;
+    private Comments comments = new Comments();
 
-    protected Assessment assessment;
+    protected Assessment assessment = new Assessment();
 
 
     Instructor(String name){
@@ -921,7 +923,7 @@ class material{
     
 }
 
-class Backpack{
+class helper{
     void CalledInstructor(Instructor ins){
         Scanner sc = new Scanner(System.in);
         while(true){
@@ -1023,7 +1025,7 @@ public class Assignment2 {
         obj2.saveStudent(obj3);
         obj2.saveStudent(obj4);
 
-        Backpack bp = new Backpack();
+        helper bp = new helper();
         while(true){
 
             if(inp==1){
