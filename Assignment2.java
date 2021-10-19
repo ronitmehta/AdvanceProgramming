@@ -465,14 +465,20 @@ class Submission{
     protected void viewGrades(Student s){
         updateHMap(s);
         ArrayList<Assessment> arr = hMap.get(s);
+        System.out.println("Graded Submission");
         for(Assessment a: arr){
             if(a.getSubmiited()==true){
                 System.out.println("ID: "+a.getID()+" "+a.getType()+": "+a.getQuestion()+" Ans given:  "+a.getAns());
                 System.out.println("Marks Obtained: "+a.getMakrs()+" Out Off: "+a.getMaxMarks());
                 System.out.println("Graded by: "+a.gradedBy);
                 System.out.println("----------------------------------");
-                
-
+            }
+        }
+        System.out.println("Ungraded Submissions");
+        for(Assessment a: arr){
+            if(a.getSubmiited()==false){
+                System.out.println("ID: "+a.getID()+" "+a.getType()+": "+a.getQuestion()+" Ans given:  "+a.getAns());
+                System.out.println("----------------------------------");
             }
         }
     }
@@ -521,9 +527,7 @@ class Submission{
                     }
                 }
             }
-        }
-        
-        
+        }   
     }
 }
 
