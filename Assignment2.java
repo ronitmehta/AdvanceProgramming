@@ -1,4 +1,3 @@
-package AdvanceProgramming;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1039,8 +1038,10 @@ public class Assignment2 {
                 }
                 System.out.println("Choose ID: ");
                 int chooseID = sc.nextInt();
+                commonFunctions user = new Instructor();
                 Instructor ins = obj0.getInstructores().get(chooseID);
-                bp.CalledInstructor(ins);
+                user = ins;
+                bp.CalledInstructor(user);
             }
 
             else if(inp==2){
@@ -1050,8 +1051,10 @@ public class Assignment2 {
                 }
                 System.out.println("Choose ID: ");
                 int chooseID = sc.nextInt();
+                commonFunctions user = new Student();
                 Student stu = obj2.getStudents().get(chooseID);
-                bp.CalledStudent(stu);
+                user = stu;
+                bp.CalledStudent(user);
 
             }
             else if(inp==3){
