@@ -1561,10 +1561,24 @@ class helper{
         }
 
         System.out.println("Eigen Values: "+ z1+"  "+z2);
-        System.out.println("Eigen Vectors: ");
-        eigenector(arr, z1);
-        eigenector(arr, z2);
+        // System.out.println("Eigen Vectors: ");
+        // eigenector(arr, z1);
+        // eigenector(arr, z2);
 
+    }
+
+    public void rowWiseOperation(double arr[][], double opetration, String toBedone, int row){
+        for(int i = 0; i<arr[0].length ; i++){
+            if(toBedone.equals("*")){
+                arr[row][i] = arr[row][i] * opetration;
+            }
+            else if(toBedone.equals("-")){
+                arr[row][i] = arr[row][i] - opetration;
+            }
+            else if(toBedone.equals("/")){
+                arr[row][i] = arr[row][i] / opetration;
+            }
+        }
     }
 
     public void eigenector(double arr[][], double z){
@@ -1572,21 +1586,74 @@ class helper{
         double j = arr[1][1] = arr[1][1] - z;
         double x = arr[0][1];
         double y = arr[1][0];
-        if(Math.abs(j)>Math.abs(i)){
-            if(i==0){
-                System.out.println(0+"  "+j);
+        
+        if(i!=0 && y!=0){
+            rowWiseOperation(arr, y, "*", 0);
+            rowWiseOperation(arr, i, "*", 1);
+            rowWiseOperation(arr, arr[0][0], "-", 1);
+
+            if(arr[1][1]==0 && arr[0][1]==0){
+                System.out.println("1  0");
             }
-            else{
-                System.out.println(j/i+"  "+1);
+            else if(arr[1][1]!=0 && arr[0][1]!=0){
+                double w = arr[1][1];
+                double k = arr[0][1];
+                rowWiseOperation(arr, w, "*", 0);
+                rowWiseOperation(arr, k, "*", 1);
+                rowWiseOperation(arr, arr[1][1], "-", 0);
+                System.out.println(arr[0][0]/arr[1][1]+"  "+1);
+            }
+            else if(arr[1][1]==0 && arr[0][1]!=0){
+                System.out.println(arr[0][0]/arr[0][1]+"  "+1);
+            }
+            else if(arr[1][1]!=0 && arr[0][1]==0){
+                System.out.println(arr[0][0]/arr[1][1]+"  "+1);
             }
         }
-        else{
-            if(j==0){
-                System.out.println(0+"  "+i);
+
+        else if(i!=0 && y==0){
+
+            if(arr[1][1]==0 && arr[0][1]==0){
+                System.out.println("1  0");
             }
-            else{
-                System.out.println(i/j+"  "+1);
+            else if(arr[1][1]!=0 && arr[0][1]!=0){
+                double w = arr[1][1];
+                double k = arr[0][1];
+                rowWiseOperation(arr, w, "*", 0);
+                rowWiseOperation(arr, k, "*", 1);
+                rowWiseOperation(arr, arr[1][1], "-", 0);
+                System.out.println(arr[0][0]/arr[1][1]+"  "+1);
             }
+            else if(arr[1][1]==0 && arr[0][1]!=0){
+                System.out.println(arr[0][0]/arr[0][1]+"  "+1);
+            }
+            else if(arr[1][1]!=0 && arr[0][1]==0){
+                System.out.println(arr[0][0]/arr[1][1]+"  "+1);
+            }
+        }
+
+        else if(i==0 && y!=0){
+            if(arr[1][1]==0 && arr[0][1]==0){
+                System.out.println("1  0");
+            }
+            else if(arr[1][1]!=0 && arr[0][1]!=0){
+                double k = arr[1][1];
+                double w = arr[0][1];
+                rowWiseOperation(arr, w, "*", 1);
+                rowWiseOperation(arr, k, "*", 0);
+                rowWiseOperation(arr, arr[0][1], "-", 1);
+                System.out.println(arr[1][0]/arr[0][1]+"  "+1);
+            }
+            else if(arr[1][1]==0 && arr[0][1]!=0){
+                System.out.println(arr[1][0]/arr[0][1]+"  "+1);
+            }
+            else if(arr[1][1]!=0 && arr[0][1]==0){
+                System.out.println(arr[1][0]/arr[1][1]+"  "+1);
+            }
+        }
+
+        else if(i==0 && y==0){
+            System.out.println("0  1");
         }
     }
 }
@@ -2064,12 +2131,12 @@ public class Assignment{
             }
 
             if(n==13){
-                double arr[][] = new double[2][2];
-                arr[0][0] = 1;
-                arr[0][1] = 2;
-                arr[1][0] = 3;
-                arr[1][1] = 4;
-                hp.eigen(arr);
+                hp.printAllMatrixOfSpecificLabelType("Square Matrix");
+                Scanner sc = new Scanner(System.in);
+                System.out.println("Choose ID: ");
+                int optID = sc.nextInt();
+                matrix mat = matrix.Matrix.get(optID);
+                hp.eigen(hp.check(mat));
             }
 
             if(n==12){
