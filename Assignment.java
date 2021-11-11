@@ -13,7 +13,6 @@ class matrix{
     private int id;
     private static int carryID = 0;
     private int isOneOrIdentity = 0 ;  // if less than zero then identity if greater than zero then ones matrix 
-    private int isScalarOrDiagonal = 0;
     private ArrayList<Object> store = new ArrayList<>();
     static HashMap<Integer, matrix> Matrix= new HashMap<>();
     helper hp = new helper();
@@ -1423,13 +1422,14 @@ class helper{
     
 
     public void performDivision(matrix mat1, matrix mat2){
+        double m1 [][] = check(mat1);
         double tobeMultiply[][] = getInverse(mat2);
         if(tobeMultiply==null){
             System.out.println("Matrix 1 Can't be divisible with matrix 2!!");
 
         }
         else{
-            performMultiplication(mat1, tobeMultiply);
+            performMultiplication(m1, tobeMultiply);
         }
 
     }
@@ -1444,7 +1444,7 @@ class helper{
     }
 
     public double [][] getAdjoint(matrix mat){
-        double arr[][] = mat.getMatrix();
+        double arr[][] = check(mat);
         int row = mat.getRow();
         double adjoint [][] = new double[row][row];
         if(row==2){
