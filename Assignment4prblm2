@@ -1,0 +1,392 @@
+package Assignment4.q2;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+class image{
+    private int ID ;
+    private boolean type;  //  if false grey or if color red
+    private static ArrayList<image> storedImages  = new ArrayList<>();
+    private color cc ;
+    private grey gy ;
+
+    image(){}
+
+    image(int optedSize, int red[][], int green[][], int blue[][]){
+        setType(true);
+        setID();
+        this.cc = new color(optedSize, red, green, blue);
+        storedImages.add(this);
+        
+    }
+
+    image(int optedSize, int grey[][]){
+        setType(false);
+        setID();
+        this.gy = new grey(optedSize, grey);
+        storedImages.add(this);
+    }
+
+    image(int optedSize, String res){
+        setID();
+        setType(true);
+        this.cc = new color(optedSize);
+        storedImages.add(this);
+    }
+
+    image(int optedSize, boolean type){
+        setID();
+        setType(type);
+        this.gy = new grey(optedSize);
+        storedImages.add(this);
+    }
+
+    public ArrayList<image> getImages(){
+        return storedImages;
+    }
+
+    public color getColor(){
+        return this.cc;
+    }
+
+    public grey getGrey(){
+        return this.gy;
+    }
+
+    public void setType(boolean type){
+        this.type = type;
+    }
+
+    public boolean getType(){
+        return this.type;
+    }
+
+    public void setID(){
+        this.ID = hashCode();
+    }
+    public int getID(){
+        return this.ID;
+    }
+}
+
+class color extends image{
+    private int Image [][][];
+    private int optedSize ;
+    private static int create = 1;
+    color(){}
+    color(int optedSize, int red[][], int green[][], int blue[][]){
+        Image = new int[optedSize][optedSize][3];
+        setOptedSize(optedSize);
+        setImage( red, green, blue);
+
+    }
+
+    color(int optedSize){
+        Image = new int[optedSize][optedSize][3];
+        setOptedSize(optedSize);
+        int red [][] = createMatrix(optedSize);
+        int green [][] = createMatrix(optedSize);
+        int blue [][] = createMatrix(optedSize);
+        setImage(red, green, blue);
+    }
+
+    public int[][] createMatrix(int n){
+        int arr[][] = new int[n][n];
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                arr[i][j] = create + n;
+            }
+        }
+        create++;
+        return arr;
+    }
+
+    public void setImage(int[][] red, int[][] green, int[][] blue) {
+        for(int i = 0; i<optedSize; i++){
+            for(int j = 0; j<optedSize; j++){
+                this.Image[i][j][0] = red[i][j];
+                this.Image[i][j][1] = green[i][j];
+                this.Image[i][j][2] = blue[i][j];
+            }
+        }
+    }
+
+    public int[][][] getImage(){
+        return this.Image;
+    }
+
+    public void setOptedSize(int optedSize){
+        this.optedSize = optedSize;
+    }
+
+    public void displayImage(){
+        
+        for(int i = 0; i<optedSize; i++){
+            for(int j = 0; j<optedSize; j++){
+                System.out.print("[Red "+(255 - Image[i][j][0])+ ", Green "+(255 - Image[i][j][1])+ ", Blue "+(255-Image[i][j][2])+"]");
+            }
+            System.out.println();
+        }
+    }   
+    
+    public void update(int i, int j){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter how many colors do you wanna update: ");
+        int n = sc.nextInt();
+        for(int k = 0 ; k<n; k++){
+            System.out.println("0. Red: ");
+            System.out.println("1. Green");
+            System.out.println("2. Blue");
+            System.out.println("Enter color you want to update: ");
+            int num = sc .nextInt();
+            System.out.println("Enter update valueL ");
+            int update = sc.nextInt();
+            this.Image[i][j][num] = update;
+        }
+    }
+}
+
+class grey extends image{
+    private int Image [][];
+    private int optedSize ;
+    private static int create = 1;
+
+    grey(){}
+
+    grey(int optedSize, int[][]grey){
+        setOptedSize(optedSize);
+        setImage(grey);
+    }
+
+    grey(int optedSize){
+        setOptedSize(optedSize);
+        createMatrix(optedSize);
+    }
+
+    public void setImage(int[][] grey){
+        this.Image = grey;
+    }
+
+    public int[][] getImage(){
+        return this.Image;
+    }
+
+    public void setOptedSize(int optedSize){
+        this.optedSize = optedSize;
+    }
+
+    public int getOptedSize(){
+        return this.optedSize;
+    }
+
+    public void createMatrix(int n){
+        int arr[][] = new int[n][n];
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                arr[i][j] = create + n;
+            }
+        }
+        create++;
+        setImage(arr);
+    }
+
+    public void displayImage(){
+        
+        for(int i = 0; i<optedSize; i++){
+            for(int j = 0; j<optedSize; j++){
+                System.out.print((255 - Image[i][j])+"  ");
+            }
+            System.out.println();
+        }
+    } 
+
+    public void update(int i, int j, int updated){
+        Image[i][j] = updated;
+    }
+}
+
+public class prblm2 {
+    public static void menu(){
+        System.out.println("0. Input Image");
+        System.out.println("1. Create Image");
+        System.out.println("2. Update Image");
+        System.out.println("3. Display Image");
+        System.out.println("4. Exit");
+    }
+
+    public static void inputMatrix(int [][] arr){
+        Scanner sc = new Scanner(System.in);
+        for(int i = 0; i<arr.length; i++){
+            for(int j = 0; j<arr[0].length; j++){
+                arr[i][j] = sc.nextInt();
+            }
+        }
+    }
+
+    public static void inputImage(){
+        System.out.println("0. Colour Image");
+        System.out.println("1. Grey Image");
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter opted type: ");
+        int optedType = sc.nextInt();
+        System.out.println();
+        System.out.print("Enter size of an image: ");
+        int optedSize = sc.nextInt();
+        if(optedType==0){
+            System.out.println("Enter Red content of an Image Matrix: ");
+            int red [][] = new int[optedSize][optedSize];
+            inputMatrix(red);
+
+            System.out.println("Enter Green content of an Image Matrix: ");
+            int green [][] = new int[optedSize][optedSize];
+            inputMatrix(green);
+
+            System.out.println("Enter blue content of an Image Matrix: ");
+            int blue[][] = new int[optedSize][optedSize];
+            inputMatrix(blue);
+
+            image im = new image(optedSize, red, green, blue);
+        }
+        else if(optedType==1){
+            System.out.println("Enter grey content of an Image Matrix: ");
+            int grey [][] = new int[optedSize][optedSize];
+            inputMatrix(grey);
+            image im = new image(optedSize, grey);
+        }
+    }
+
+    public static void display(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("0. Colour Image");
+        System.out.println("1. Grey Image");
+        System.out.println("2. All Images");
+        System.out.print("Enter opted type: ");
+        int optedType = sc.nextInt();
+        image im = new image();
+        if(optedType==0){
+            for(image imo : im.getImages()){
+                if(imo.getType()==true){
+                    System.out.println(imo.getID());
+                    imo.getColor().displayImage();
+                }
+            }
+        }
+        else if(optedType==1){
+            for(image imo : im.getImages()){
+                if(imo.getType()==false){
+                    System.out.println(imo.getID());
+                    imo.getGrey().displayImage();
+                }
+            }
+        }
+        else{
+            for(image imo : im.getImages()){
+                if(imo.getType()==true){
+                    System.out.println(imo.getID());
+                    imo.getColor().displayImage();
+                }
+                else{
+                    System.out.println(imo.getID());
+                    imo.getGrey().displayImage();
+                }
+            }
+        }
+
+    }
+
+    public static void create(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("0. Colour Image");
+        System.out.println("1. Grey Image");
+        System.out.print("Enter opted type: ");
+        int optedType = sc.nextInt();
+        System.out.print("Enter opted size: ");
+        int optedSize = sc.nextInt();
+        if(optedType==0){
+            image im = new image(optedSize, "");
+        }
+        else {
+            image im = new image(optedSize, false);
+        }
+    }
+
+    public static void update(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("0. Colour Image");
+        System.out.println("1. Grey Image");
+        System.out.print("Enter opted type: ");
+        int optedType = sc.nextInt();
+        image im = new image();
+        if(optedType==0){
+            for(image imo : im.getImages()){
+                if(imo.getType()==true){
+                    System.out.println(imo.getID());
+                    imo.getColor().displayImage();
+                }
+            }
+            System.out.println("Enter ID of opted Image: ");
+            int ID = sc.nextInt();
+            System.out.println("Enter location where you want to update: ");
+            int i = sc.nextInt();
+            int j = sc.nextInt();
+            for(image imo : im.getImages()){
+                if(imo.getType()==true){
+                    if(imo.getID()==ID){
+                        imo.getColor().update(i, j);
+                    }
+                }
+            }
+        }
+        else if(optedType==1){
+            for(image imo : im.getImages()){
+                if(imo.getType()==false){
+                    System.out.println(imo.getID());
+                    imo.getGrey().displayImage();
+                }
+            }
+            System.out.println("Enter ID of opted Image: ");
+            int ID = sc.nextInt();
+            System.out.println("Enter location where you want to update: ");
+            int i = sc.nextInt();
+            int j = sc.nextInt();
+            System.out.println("Enter update: ");
+            int update = sc.nextInt();
+            for(image imo : im.getImages()){
+                if(imo.getType()==false){
+                    if(imo.getID()==ID){
+                        imo.getGrey().update(i, j, update);
+                    }
+                }
+            }
+        }
+    }
+
+
+    public static void main(String[] args) {
+        Scanner scn = new Scanner(System.in);
+        while(true){
+            menu();
+            int exit = scn.nextInt();
+            if(exit == 0){
+                inputImage();
+                image im = new image();
+                System.out.println(im.getImages());
+            }
+            else if(exit ==1){
+                create();
+            }
+            else if(exit ==2){
+                update();
+            }
+            else if(exit ==3){
+                display();
+            }
+            else{
+                break;
+            }
+        }
+        
+    }
+    
+}
