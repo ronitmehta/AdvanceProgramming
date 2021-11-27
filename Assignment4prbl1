@@ -1,0 +1,309 @@
+package Assignment4;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class book{
+    private String name;
+    private int ISBN;
+    private int barCode;
+    static int nothing = 0;
+    private static ArrayList<book> bookStore = new ArrayList<>();
+    private int rack = 0;
+    private int slot = 0; 
+    
+    book(){}
+    book( String name, int ISBN, int barCode){
+        boolean check = setBarCode( barCode);
+        if(check){
+            setISBN(ISBN);
+            setName(name);
+            bookStore.add(this);
+            nothing++;
+        }
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setISBN(int ISBN){
+        this.ISBN = ISBN;
+    }
+
+    public boolean setBarCode( int barCode){
+        if(checkForBarcode( barCode)){
+            System.out.println("BarCode already exist try with new bar code!!!");
+            return false;
+        }
+        this.barCode = barCode;
+        return true;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getISBN(){
+        return ISBN;
+    }
+
+    public int getBarCode(){
+        return this.barCode;
+    }
+
+    public ArrayList<book> getBooks(){
+        return bookStore;
+    }
+
+    public void setAtIndex(int i, book bk){
+        bookStore.remove(i);
+        bookStore.add(i, bk);
+    }
+
+    public void setRack(int rack){
+        this.rack = rack;
+    }
+
+    public int getRack(){
+        return this.rack;
+    }
+
+    public void setSlot(int slot){
+        this.slot = slot;
+    }
+
+    public int getSlot(){
+        return this.slot;
+    }
+
+    public boolean checkForBarcode( int barCode){
+        for(book b: bookStore){
+            if(b.getBarCode() == barCode){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void printDetails(){
+        System.out.println("------------Book details----------- ");
+        System.out.println("Title: "+this.getName());
+        System.out.println("ISBN: "+this.getISBN());
+        System.out.println("Bar-Code: "+this.getBarCode());
+        System.out.println("Rack number: "+this.getRack());
+        System.out.println("Slot number in the rack: "+this.getSlot());
+        System.out.println();
+    }
+
+    public void sort(int noOfBooks, int noOfRacks){
+        comparartor n1 = new name();
+        comparartor I1 = new ISBN();
+        comparartor B1 = new BarCode();
+
+        book temp = new book();
+        for(int i = 0; i<getBooks().size(); i++){
+            for(int j = 0; j<getBooks().size(); j++){
+                if(i==j){
+                    continue;
+                }
+                int num = n1.getMax(temp.getBooks().get(i), temp.getBooks().get(j));
+                if(num == 0){
+                    int num1 = I1.getMax(temp.getBooks().get(i), temp.getBooks().get(j));
+                    if(num1==0){
+                        int num2 = B1.getMax(temp.getBooks().get(i), temp.getBooks().get(j));
+                        if(num2==2){
+                            book bk = temp.getBooks().get(i);
+                            temp.setAtIndex(i, temp.getBooks().get(j)); 
+                            temp.setAtIndex(j, bk);
+                        }
+                    }
+                    else if(num1==2){
+                        book bk = temp.getBooks().get(i);
+                        temp.setAtIndex(i, temp.getBooks().get(j)); 
+                        temp.setAtIndex(j, bk);
+                    }
+                }
+                else if(num ==2 ){
+                    book bk = temp.getBooks().get(i);
+                    temp.setAtIndex(i, temp.getBooks().get(j)); 
+                    temp.setAtIndex(j, bk);
+                }
+                                
+            }
+        }
+    }
+
+    public void updateSlotsAndRack(int noOfBooks, int noOfRacks){
+        int getBook = 0;
+        for(int i = 0; i<noOfRacks; i++){
+            for(int j = 0; j<noOfBooks/noOfRacks; j++){
+                getBooks().get(getBook).setRack(i);
+                getBooks().get(getBook).setSlot(j);
+                getBook++;
+            }
+        }
+    }
+}
+
+interface comparartor{
+    public int getMax(book a, book b);
+}
+
+class name implements comparartor{
+
+    @Override
+    public int getMax(book a, book b) {
+        if(a.getName().length()==1 && b.getName().length()==1){
+            if(a.getName().charAt(0)>b.getName().charAt(0)){
+                return 1;
+            }
+            else if(a.getName().charAt(0)<b.getName().charAt(0)){
+                return 2;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        book min = min(a, b);
+        
+        for(int i = 0; i<min.getName().length(); i++){
+            if(a.getName().length()-1==i && b.getName().length()-1==i){
+                return 0;
+            }
+
+            else if(a.getName().length()-1==i ){
+                return 2;
+            }
+            else if(b.getName().length()-1==i){
+                return 1;
+            }
+            else if(a.getName().charAt(i)>b.getName().charAt(i)){
+                return 1;
+            }
+            else if(a.getName().charAt(i)>b.getName().charAt(i)){
+                return 2;
+            }
+        }
+        return 0;
+        
+    }
+
+    public book min(book a, book b){
+        if(a.getName().length()>b.getName().length()){
+            return b;
+        }
+        return a;
+    }
+    
+}
+
+class ISBN implements comparartor{
+
+    @Override
+    public int getMax(book a, book b) {
+        if(a.getISBN()>b.getISBN()){
+            return 1;
+        }
+        else if(a.getISBN()<b.getISBN()){
+            return 2;
+        }
+        return 0;
+    }
+    
+}
+
+class BarCode implements comparartor{
+
+    @Override
+    public int getMax(book a, book b) {
+        if(a.getBarCode()>b.getBarCode()){
+            return 1;
+        }
+        else if(a.getBarCode()<b.getBarCode()){
+            return 2;
+        }
+        return 0;
+    }
+    
+}
+
+public class q1 {
+
+    public static void menu(){
+        System.out.println("1. Display Book ");
+        System.out.println("2. Search Book ");
+        System.out.println("3. Exit");
+    }
+
+    private static void findBook(int noOfBooks, int noOfRacks) {
+        book bk = new book();
+        bk.sort(noOfBooks, noOfRacks);
+        bk.updateSlotsAndRack(noOfBooks, noOfRacks);
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Enter Book name: ");
+        String str = scn.nextLine();
+        book k = new book();
+        boolean check = false;
+        for(int i = 0; i<noOfBooks; i++){
+            if(k.getBooks().get(i).getName().equals(str)){
+                check = true;
+                k = k.getBooks().get(i);
+                break;
+            }
+        }
+        if(check == true){
+            k.printDetails();
+        }
+        else{
+            System.out.println("Book is not Available!!!");
+        }
+    }
+
+    private static void displayBook(int noOfBooks, int noOfRacks) {
+        book bk = new book();
+        bk.sort(noOfBooks, noOfRacks);
+        bk.updateSlotsAndRack(noOfBooks, noOfRacks);
+        for(int i = 0; i<bk.getBooks().size(); i++){
+            bk.getBooks().get(i).printDetails();
+        }
+    } 
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the number of books: ");
+        int noOfBooks = sc.nextInt();
+        System.out.println("Enter the number of racks: ");
+        int noOfRacks = sc.nextInt();
+
+        System.out.println("---------------Add Books-----------");
+        while(book.nothing!=noOfBooks){
+            String str = sc.nextLine();
+            System.out.println("Enter book name: ");
+            String name = sc.nextLine();
+            System.out.println("Enter book ISBN: ");
+            int ISBN = sc.nextInt();
+            System.out.println("Enter book Bar-Code: ");
+            int barCode = sc.nextInt();
+            book bk = new book(name, ISBN, barCode);
+            
+        }
+
+        int exit = 0;
+        while(exit !=3){
+            menu();
+            System.out.print("Enter function to be performed: ");
+            exit = sc.nextInt();
+            if(exit == 1){
+                displayBook(noOfBooks, noOfRacks);
+            }
+            else if(exit==2){
+                findBook(noOfBooks, noOfRacks);
+            }
+            else {
+                break;
+            }
+        }  
+    }  
+}
